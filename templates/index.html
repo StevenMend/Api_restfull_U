@@ -1,0 +1,438 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="es">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Cafés en Tamarindo</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            background-color: #f9f9f9;-->
+<!--            margin: 0;-->
+<!--            padding: 20px;-->
+<!--        }-->
+<!--        h1 {-->
+<!--            color: #333;-->
+<!--        }-->
+<!--        input[type="text"], input[type="number"] {-->
+<!--            padding: 10px;-->
+<!--            width: 300px;-->
+<!--            margin-bottom: 10px;-->
+<!--        }-->
+<!--        button {-->
+<!--            padding: 10px 15px;-->
+<!--            background-color: #28a745;-->
+<!--            color: white;-->
+<!--            border: none;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        button:hover {-->
+<!--            background-color: #218838;-->
+<!--        }-->
+<!--        #cafes {-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+<!--        #message {-->
+<!--            margin-top: 20px;-->
+<!--            color: green;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Cafés en Tamarindo</h1>-->
+
+<!--    <h2>Buscar Cafés</h2>-->
+<!--    <input type="text" id="locationInput" placeholder="Ingresa una ubicación">-->
+<!--    <button id="searchButton">Buscar</button>-->
+
+<!--    <h2>Agregar Café</h2>-->
+<!--    <input type="text" id="addName" placeholder="Nombre del café">-->
+<!--    <input type="text" id="addLocation" placeholder="Ubicación">-->
+<!--    <input type="text" id="addPhone" placeholder="Teléfono">-->
+<!--    <input type="text" id="addWebpage" placeholder="Página Web">-->
+<!--    <input type="number" id="addReviews" placeholder="Número de Reseñas">-->
+<!--    <input type="text" id="addRanking" placeholder="Rango">-->
+<!--    <input type="text" id="addCategory" placeholder="Categoría">-->
+<!--    <input type="text" id="addHours" placeholder="Horas">-->
+<!--    <input type="text" id="addCuisineTypes" placeholder="Tipos de Cocina">-->
+<!--    <input type="text" id="addSpecialDiets" placeholder="Dietas Especiales">-->
+<!--    <input type="text" id="addMeals" placeholder="Comidas">-->
+<!--    <input type="number" id="addAverageRating" placeholder="Calificación Promedio">-->
+<!--    <input type="text" id="addAdvantages" placeholder="Ventajas">-->
+<!--    <button id="addButton">Agregar Café</button>-->
+
+<!--    <h2>Actualizar Café</h2>-->
+<!--    <input type="number" id="updateId" placeholder="ID del Café a Actualizar">-->
+<!--    <input type="text" id="updateRanking" placeholder="Nuevo Rango">-->
+<!--    <input type="number" id="updateAverageRating" placeholder="Nueva Calificación Promedio">-->
+<!--    <button id="updateButton">Actualizar Café</button>-->
+
+<!--    <h2>Eliminar Café</h2>-->
+<!--    <input type="number" id="deleteId" placeholder="ID del Café a Eliminar">-->
+<!--    <button id="deleteButton">Eliminar Café</button>-->
+
+<!--    <h2>Café Aleatorio</h2>-->
+<!--    <button id="randomButton">Obtener Café Aleatorio</button>-->
+
+<!--    <div id="cafes"></div>-->
+<!--    <div id="message"></div>-->
+
+<!--    <script>-->
+<!--        document.getElementById('searchButton').onclick = function() {-->
+<!--            const location = document.getElementById('locationInput').value;-->
+<!--            fetch(`/search?loc=${encodeURIComponent(location)}`)-->
+<!--                .then(response => response.json())-->
+<!--                .then(data => {-->
+<!--                    const cafesDiv = document.getElementById('cafes');-->
+<!--                    cafesDiv.innerHTML = '';  // Limpiar resultados anteriores-->
+<!--                    if (data.cafes) {-->
+<!--                        data.cafes.forEach(cafe => {-->
+<!--                            const cafeInfo = document.createElement('div');-->
+<!--                            cafeInfo.innerHTML = `-->
+<!--                                <h3>${cafe.name}</h3>-->
+<!--                                <p>Ubicación: ${cafe.location}</p>-->
+<!--                                <p>Teléfono: ${cafe.phone}</p>-->
+<!--                                <p>Página Web: <a href="${cafe.webpage}" target="_blank">${cafe.webpage}</a></p>-->
+<!--                                <p>Rango: ${cafe.ranking}</p>-->
+<!--                                <p>Promedio de calificación: ${cafe.average_rating}</p>-->
+<!--                                <p>Horas: ${cafe.hours}</p>-->
+<!--                                <hr>-->
+<!--                            `;-->
+<!--                            cafesDiv.appendChild(cafeInfo);-->
+<!--                        });-->
+<!--                    } else {-->
+<!--                        cafesDiv.innerHTML = `<p>${data.message}</p>`;-->
+<!--                    }-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error('Error:', error);-->
+<!--                });-->
+<!--        };-->
+
+<!--        document.getElementById('addButton').onclick = function() {-->
+<!--            const cafeData = {-->
+<!--                name: document.getElementById('addName').value,-->
+<!--                location: document.getElementById('addLocation').value,-->
+<!--                phone: document.getElementById('addPhone').value,-->
+<!--                webpage: document.getElementById('addWebpage').value,-->
+<!--                reviews: parseInt(document.getElementById('addReviews').value, 10),-->
+<!--                ranking: document.getElementById('addRanking').value,-->
+<!--                category: document.getElementById('addCategory').value,-->
+<!--                hours: document.getElementById('addHours').value,-->
+<!--                cuisine_types: document.getElementById('addCuisineTypes').value,-->
+<!--                special_diets: document.getElementById('addSpecialDiets').value,-->
+<!--                meals: document.getElementById('addMeals').value,-->
+<!--                average_rating: parseFloat(document.getElementById('addAverageRating').value),-->
+<!--                advantages: document.getElementById('addAdvantages').value,-->
+<!--            };-->
+
+<!--            fetch('/add', {-->
+<!--                method: 'POST',-->
+<!--                headers: { 'Content-Type': 'application/json' },-->
+<!--                body: JSON.stringify(cafeData)-->
+<!--            })-->
+<!--            .then(response => response.json())-->
+<!--            .then(data => {-->
+<!--                document.getElementById('message').innerText = data.message;  // Mostrar mensaje-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                console.error('Error:', error);-->
+<!--            });-->
+<!--        };-->
+
+<!--        document.getElementById('updateButton').onclick = function() {-->
+<!--            const id = document.getElementById('updateId').value;-->
+<!--            const updateData = {-->
+<!--                ranking: document.getElementById('updateRanking').value,-->
+<!--                average_rating: parseFloat(document.getElementById('updateAverageRating').value)-->
+<!--            };-->
+
+<!--            fetch(`/update/${id}`, {-->
+<!--                method: 'PUT',-->
+<!--                headers: { 'Content-Type': 'application/json' },-->
+<!--                body: JSON.stringify(updateData)-->
+<!--            })-->
+<!--            .then(response => response.json())-->
+<!--            .then(data => {-->
+<!--                document.getElementById('message').innerText = data.message;  // Mostrar mensaje-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                console.error('Error:', error);-->
+<!--            });-->
+<!--        };-->
+
+<!--        document.getElementById('deleteButton').onclick = function() {-->
+<!--            const id = document.getElementById('deleteId').value;-->
+
+<!--            fetch(`/delete/${id}`, {-->
+<!--                method: 'DELETE'-->
+<!--            })-->
+<!--            .then(response => response.json())-->
+<!--            .then(data => {-->
+<!--                document.getElementById('message').innerText = data.message;  // Mostrar mensaje-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                console.error('Error:', error);-->
+<!--            });-->
+<!--        };-->
+
+<!--        document.getElementById('randomButton').onclick = function() {-->
+<!--            fetch('/random')-->
+<!--                .then(response => response.json())-->
+<!--                .then(data => {-->
+<!--                    const cafesDiv = document.getElementById('cafes');-->
+<!--                    cafesDiv.innerHTML = '';  // Limpiar resultados anteriores-->
+<!--                    if (data.cafe) {-->
+<!--                        const cafe = data.cafe;-->
+<!--                        const cafeInfo = document.createElement('div');-->
+<!--                        cafeInfo.innerHTML = `-->
+<!--                            <h3>${cafe.name}</h3>-->
+<!--                            <p>Ubicación: ${cafe.location}</p>-->
+<!--                            <p>Teléfono: ${cafe.phone}</p>-->
+<!--                            <p>Página Web: <a href="${cafe.webpage}" target="_blank">${cafe.webpage}</a></p>-->
+<!--                            <p>Rango: ${cafe.ranking}</p>-->
+<!--                            <p>Promedio de calificación: ${cafe.average_rating}</p>-->
+<!--                            <p>Horas: ${cafe.hours}</p>-->
+<!--                            <hr>-->
+<!--                        `;-->
+<!--                        cafesDiv.appendChild(cafeInfo);-->
+<!--                    } else {-->
+<!--                        cafesDiv.innerHTML = `<p>${data.message}</p>`;-->
+<!--                    }-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error('Error:', error);-->
+<!--                });-->
+<!--        };-->
+<!--    </script>-->
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafés en Tamarindo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #cafes {
+            margin-top: 20px;
+        }
+        #message {
+            margin-top: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cafés en Tamarindo</h1>
+
+    <h2>Buscar Cafés</h2>
+    <input type="text" id="locationInput" placeholder="Ingresa una ubicación">
+    <button id="searchButton">Buscar</button>
+
+    <h2>Agregar Café</h2>
+    <input type="text" id="addName" placeholder="Nombre del café">
+    <input type="text" id="addLocation" placeholder="Ubicación">
+    <input type="text" id="addPhone" placeholder="Teléfono">
+    <input type="text" id="addWebpage" placeholder="Página Web">
+    <input type="number" id="addReviews" placeholder="Número de Reseñas">
+    <input type="text" id="addRanking" placeholder="Rango">
+    <input type="text" id="addCategory" placeholder="Categoría">
+    <input type="text" id="addHours" placeholder="Horas">
+    <input type="text" id="addCuisineTypes" placeholder="Tipos de Cocina">
+    <input type="text" id="addSpecialDiets" placeholder="Dietas Especiales">
+    <input type="text" id="addMeals" placeholder="Comidas">
+    <input type="number" id="addAverageRating" placeholder="Calificación Promedio">
+    <input type="text" id="addAdvantages" placeholder="Ventajas">
+    <button id="addButton">Agregar Café</button>
+
+    <h2>Actualizar Café</h2>
+    <input type="number" id="updateId" placeholder="ID del Café a Actualizar">
+    <input type="text" id="updateRanking" placeholder="Nuevo Rango">
+    <input type="number" id="updateAverageRating" placeholder="Nueva Calificación Promedio">
+    <button id="updateButton">Actualizar Café</button>
+
+    <h2>Eliminar Café</h2>
+    <input type="number" id="deleteId" placeholder="ID del Café a Eliminar">
+    <button id="deleteButton">Eliminar Café</button>
+
+    <h2>Café Aleatorio</h2>
+    <button id="randomButton">Obtener Café Aleatorio</button>
+
+    <div id="cafes"></div>
+    <div id="message"></div>
+
+    <script>
+        document.getElementById('searchButton').onclick = function() {
+            const location = document.getElementById('locationInput').value;
+            fetch(`/search?loc=${encodeURIComponent(location)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const cafesDiv = document.getElementById('cafes');
+                    cafesDiv.innerHTML = '';  // Limpiar resultados anteriores
+                    if (data.cafes) {
+                        data.cafes.forEach(cafe => {
+                            const cafeInfo = document.createElement('div');
+                            cafeInfo.innerHTML = `
+                                <h3>${cafe.name}</h3>
+                                <p>Ubicación: ${cafe.location}</p>
+                                <p>Teléfono: ${cafe.phone}</p>
+                                <p>Página Web: <a href="${cafe.webpage}" target="_blank">${cafe.webpage}</a></p>
+                                <p>Rango: ${cafe.ranking}</p>
+                                <p>Promedio de calificación: ${cafe.average_rating}</p>
+                                <p>Horas: ${cafe.hours}</p>
+                                <hr>
+                            `;
+                            cafesDiv.appendChild(cafeInfo);
+                        });
+                    } else {
+                        cafesDiv.innerHTML = `<p>${data.message}</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        };
+
+        document.getElementById('addButton').onclick = function() {
+            const cafeData = {
+                name: document.getElementById('addName').value,
+                location: document.getElementById('addLocation').value,
+                phone: document.getElementById('addPhone').value,
+                webpage: document.getElementById('addWebpage').value,
+                reviews: parseInt(document.getElementById('addReviews').value, 10),
+                ranking: document.getElementById('addRanking').value,
+                category: document.getElementById('addCategory').value,
+                hours: document.getElementById('addHours').value,
+                cuisine_types: document.getElementById('addCuisineTypes').value,
+                special_diets: document.getElementById('addSpecialDiets').value,
+                meals: document.getElementById('addMeals').value,
+                average_rating: parseFloat(document.getElementById('addAverageRating').value),
+                advantages: document.getElementById('addAdvantages').value,
+            };
+
+            fetch('/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(cafeData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;  // Mostrar mensaje
+                // Limpiar los campos del formulario después de agregar
+                document.getElementById('addName').value = '';
+                document.getElementById('addLocation').value = '';
+                document.getElementById('addPhone').value = '';
+                document.getElementById('addWebpage').value = '';
+                document.getElementById('addReviews').value = '';
+                document.getElementById('addRanking').value = '';
+                document.getElementById('addCategory').value = '';
+                document.getElementById('addHours').value = '';
+                document.getElementById('addCuisineTypes').value = '';
+                document.getElementById('addSpecialDiets').value = '';
+                document.getElementById('addMeals').value = '';
+                document.getElementById('addAverageRating').value = '';
+                document.getElementById('addAdvantages').value = '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
+        document.getElementById('updateButton').onclick = function() {
+            const id = document.getElementById('updateId').value;
+            const updateData = {
+                ranking: document.getElementById('updateRanking').value,
+                average_rating: parseFloat(document.getElementById('updateAverageRating').value)
+            };
+
+            fetch(`/update/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updateData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;  // Mostrar mensaje
+                // Limpiar campos del formulario de actualización
+                document.getElementById('updateId').value = '';
+                document.getElementById('updateRanking').value = '';
+                document.getElementById('updateAverageRating').value = '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
+        document.getElementById('deleteButton').onclick = function() {
+            const id = document.getElementById('deleteId').value;
+
+            fetch(`/delete/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;  // Mostrar mensaje
+                // Limpiar campo del formulario de eliminación
+                document.getElementById('deleteId').value = '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
+        document.getElementById('randomButton').onclick = function() {
+            fetch('/random')
+                .then(response => response.json())
+                .then(data => {
+                    const cafesDiv = document.getElementById('cafes');
+                    cafesDiv.innerHTML = '';  // Limpiar resultados anteriores
+                    if (data.cafe) {
+                        const cafe = data.cafe;
+                        const cafeInfo = document.createElement('div');
+                        cafeInfo.innerHTML = `
+                            <h3>${cafe.name}</h3>
+                            <p>Ubicación: ${cafe.location}</p>
+                            <p>Teléfono: ${cafe.phone}</p>
+                            <p>Página Web: <a href="${cafe.webpage}" target="_blank">${cafe.webpage}</a></p>
+                            <p>Rango: ${cafe.ranking}</p>
+                            <p>Promedio de calificación: ${cafe.average_rating}</p>
+                            <p>Horas: ${cafe.hours}</p>
+                            <hr>
+                        `;
+                        cafesDiv.appendChild(cafeInfo);
+                    } else {
+                        cafesDiv.innerHTML = `<p>${data.message}</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        };
+    </script>
+</body>
+</html>
